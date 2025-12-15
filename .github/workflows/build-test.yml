@@ -26,6 +26,8 @@ jobs:
           node-version: '18.x'
       - run: npm install
       - run: npm test
+        env: 
+          PASSWORD: ${{secrets.PASSWORD}}
   sca:
     needs: build
     runs-on: ubuntu-latest
