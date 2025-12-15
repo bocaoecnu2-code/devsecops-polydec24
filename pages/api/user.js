@@ -15,10 +15,16 @@ export default async function handler(req, res) {
 
   // VULNERABILITY: SQL Injection - user input directly concatenated into query
   const userId = req.query.id;
-  const query = `SELECT * FROM users WHERE id = ${userId}`;
+  const query = `SELECT * FROM users WHERE id = ?`;
   
   try {
-    const result = await client.query(query);
+    const result = await sequelize.query(
+  query,
+  {
+    replacements: [userId],
+    type: sequelize.QueryTypes.SELECT
+  }
+);
     res.status(200).json({ user: result.rows[0] });
   } catch (error) {
     res.status(500).json({ error: 'Database error' });
